@@ -46,6 +46,7 @@ def GetVersionNumber():
     shutil.rmtree(cacheRoot, ignore_errors=True)
     print("Updating version")
     # create cache folder
+    GetCacheFolder()
     versionFilePath = os.path.join(cacheRoot, version)
     # create new version file
     with open(file=versionFilePath, mode='w', encoding='utf-8') as f:

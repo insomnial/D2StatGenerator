@@ -20,6 +20,7 @@ from app.reports.WeaponRaceReport import WeaponRaceReport
 from app.reports.WeaponReport import WeaponReport
 from app.reports.WeekdayReport import WeekdayReport
 # from app.DiscordSender import DiscordSender
+import os
 
 if __name__ == '__main__':
     import pathos
@@ -27,15 +28,25 @@ if __name__ == '__main__':
     pathos.helpers.freeze_support()  # required for windows
     manifest = DestinyManifest().update()
 
-    pool = ProcessPool(25)
+    pool = ProcessPool(5)
     # You could also specify the amount of threads. Not that this DRASTICALLY speeds up the process, but takes serious computation power
     # pool = ProcessPool(60)
 
-    MEMBERSHIP_MIJAGO = (3, 4611686018482684809)
-    USED_MEMBERSHIP = MEMBERSHIP_MIJAGO
+    # Xbox     1
+    # Psn      2
+    # Steam    3
+    # Blizzard 4
+    # Stadia   5
+    # Egs      6
+    # MEMBERSHIP_NAME = (platform, bungie ID)
 
-    api = BungieApi("API-KEY")
-    VIDEO_TYPE = "gif" # you can also use "mp4" if you installed ffmpeg; see README.d
+    MEMBERSHIP_MIJAGO = (3, 4611686018482684809)
+    MEMBERSHIP_SUPERQ = (3, 4611686018472661350)
+    USED_MEMBERSHIP = MEMBERSHIP_SUPERQ
+
+    api = BungieApi(os.getenv('api_key'))
+    # "gif by default, "mp4" if you installed ffmpeg; see README.d
+    VIDEO_TYPE = "mp4"
 
     Director.CreateDirectoriesForUser(*USED_MEMBERSHIP)
     Director.ClearResultDirectory(*USED_MEMBERSHIP)

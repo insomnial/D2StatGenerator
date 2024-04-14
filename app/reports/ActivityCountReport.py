@@ -39,7 +39,7 @@ class ActivityCountReport(Report):
             for entry in datapoint["entries"]:
                 if entry["player"]["destinyUserInfo"]["membershipId"] != str(self.membershipId): continue
                 typus = "PvE"
-                if datapoint["activityDetails"]["mode"] in [91, 90, 89, 84, 81, 80, 74, 73, 72, 71, 68, 65, 62, 61,32, 60, 59, 32, 50, 48, 43, 45, 44, 41, 42, 37, 38, 31, 25, 15]:
+                if datapoint["activityDetails"]["mode"] in [92, 91, 90, 89, 84, 81, 80, 74, 73, 72, 71, 68, 65, 62, 61,32, 60, 59, 32, 50, 48, 43, 45, 44, 41, 42, 37, 38, 31, 25, 15]:
                     typus = "PvP"
                 elif datapoint["activityDetails"]["mode"] in [75, 63]:
                     typus = "Gambit"
@@ -63,3 +63,4 @@ class ActivityCountReport(Report):
 
         df = df.groupby(["type", "mode", "directorActivity"]).size().reset_index(name='count')
         return df
+    

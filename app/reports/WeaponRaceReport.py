@@ -66,7 +66,7 @@ class WeaponRaceReport(Report):
             if "weapons" not in entry["extended"]: continue
 
             typus = "pve"
-            if data["activityDetails"]["mode"] in [91, 90, 89, 84, 81, 80, 74, 73, 72, 71, 68, 65, 62, 61, 60, 59, 50, 48, 32, 43, 45, 44, 41, 42, 37, 38, 31, 25, 15]:
+            if data["activityDetails"]["mode"] in [92, 91, 90, 89, 84, 81, 80, 74, 73, 72, 71, 68, 65, 62, 61, 60, 59, 50, 48, 32, 43, 45, 44, 41, 42, 37, 38, 31, 25, 15]:
                 typus = "pvp"
             #elif data["activityDetails"]["mode"] in [75, 63]: #    typus = "gambit"
             if typus != typ:
@@ -85,8 +85,8 @@ class WeaponRaceReport(Report):
                     )
 
         df = pd.DataFrame(eps, columns=["date", "name", "kills"])
-        df2 = df.groupby([df.date.dt.to_period('W'), "name"]).sum().reset_index()
-        df2["cumsum"] = df2.groupby(["name"]).cumsum()
+        df2 = df.groupby([df.date.dt.to_period('W'), "name"]).sum(numeric_only=True).reset_index()
+        df2["cumsum"] = df2.groupby(["name"]).cumsum(numeric_only=True)
         df3 = df2.pivot(index="date", columns="name", values="cumsum")
 
         df3 = df3.fillna(method='ffill')

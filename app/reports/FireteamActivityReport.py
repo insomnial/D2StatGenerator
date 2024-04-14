@@ -8,7 +8,7 @@ class FireteamActivityReport(Report):
 
     def save(self):
         with open("%s/%s.csv" % (Director.GetResultDirectory(self.membershipType, self.membershipId), "[ALL] table - fireteam member activities"), "w", encoding='utf-8') as f:
-            self.df.to_csv(f, index=False, line_terminator='\n')
+            self.df.to_csv(f, index=False)
         print("Report> Generated %s" % self.getName())
 
     def getName(self) -> str:

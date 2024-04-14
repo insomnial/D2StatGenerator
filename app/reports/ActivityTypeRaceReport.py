@@ -67,8 +67,8 @@ class ActivityTypeRaceReport(Report):
             )
 
         df = pd.DataFrame(eps, columns=["date", "name", "hours"])
-        df2 = df.groupby([df.date.dt.to_period('W'), "name"]).sum().reset_index()
-        df2["cumsum"] = df2.groupby(["name"]).cumsum()
+        df2 = df.groupby([df.date.dt.to_period('W'), "name"]).sum(numeric_only=True).reset_index()
+        df2["cumsum"] = df2.groupby(["name"]).cumsum(numeric_only=True)
         df3 = df2.pivot(index="date", columns="name", values="cumsum")
 
         df3 = df3.fillna(method='ffill')

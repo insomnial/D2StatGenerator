@@ -78,7 +78,7 @@ class PGCRCollector:
                 tries += 1
                 pgcr = bungo.getPGCR(id)
 
-            with open("%s/pgcr_%s.json" % (Director.GetPGCRDirectory(self.membershipType, self.membershipId), pgcr["activityDetails"]["instanceId"]), "w") as f:
+            with open("%s/pgcr_%s.json" % (Director.GetPGCRDirectory(self.membershipType, self.membershipId), pgcr["activityDetails"]["instanceId"]), "w", encoding='utf-8') as f:
                 f.write(json.dumps(pgcr))
 
         stepsize = pagesize
@@ -111,8 +111,11 @@ class PGCRCollector:
             for fname in fnameList:
                 if fname is None:
                     continue
-                with open(fname, "r") as f:
-                    r.append( json.load(f))
+                with open(fname, "r", encoding='utf-8') as f:
+                    try:
+                        r.append(json.load(f))
+                    except Exception:
+                        print('Error on %s' % fname)
             return r
 
         with Timer("Get all PGCRs from individual files"):

@@ -20,34 +20,48 @@ from app.reports.WeaponRaceReport import WeaponRaceReport
 from app.reports.WeaponReport import WeaponReport
 from app.reports.WeekdayReport import WeekdayReport
 # from app.DiscordSender import DiscordSender
-import os
 
+###############################################################################
+#
+# main()
+#
+###############################################################################
 if __name__ == '__main__':
-    import pathos
+    import pathos, argparse, os
+
+    # build argument parsing
+    descriptionString = """Get and compile stats for a Destiny 2 user.
+    example: main.py 3 4611686018482684809"""
+    platformString = """    Xbox     1
+    Psn      2
+    Steam    3
+    Blizzard 4
+    Stadia   5
+    Egs      6"""
+    parser = argparse.ArgumentParser(prog='main.py', description=f'{descriptionString}', formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-p', type=int, required=False, dest='Platform', help=f'{platformString}')
+    parser.add_argument('-id', type=int, required=False, help='bungie ID')
+    args = parser.parse_args()
+
     from pathos.multiprocessing import ProcessPool
     pathos.helpers.freeze_support()  # required for windows
-    manifest = DestinyManifest().update()
-
     pool = ProcessPool()
     # You could also specify the amount of threads. Not that this DRASTICALLY speeds up the process but takes serious computation power.
     # pool = ProcessPool(60)
 
-    # Xbox     1
-    # Psn      2
-    # Steam    3
-    # Blizzard 4
-    # Stadia   5
-    # Egs      6
-    # MEMBERSHIP_NAME = (platform, bungie ID)
+    MIJAGO = (3, 4611686018482684809)
+    SUPERQ = (3, 4611686018472661350)
+    SHTGUNWEDDING = (2, 4611686018428655241)
+    EURO = (3, 4611686018471254627)
+    DREDGENQ = (3, 4611686018534347056)
+    SPRQMAN = (2, 4611686018436271063)
+    USED_MEMBERSHIP = SHTGUNWEDDING
 
-    MEMBERSHIP_MIJAGO = (3, 4611686018482684809)
-    MEMBERSHIP_SUPERQ = (3, 4611686018472661350)
-    MEMBERSHIP_SHTGUNWEDDING = (2, 4611686018428655241)
-    
-    USED_MEMBERSHIP = MEMBERSHIP_SHTGUNWEDDING
+    # check manifest
+    manifest = DestinyManifest().update()
 
-    api = BungieApi(os.getenv('api_key'))
-    # "gif by default, "mp4" if you installed ffmpeg; see README.d
+    api = BungieApi(os.getenv('BUNGIE_API_KEY'))
+    # "gif by default, "mp4" if you installed ffmpeg which you should; see README.d
     VIDEO_TYPE = "mp4"
 
     Director.CreateDirectoriesForUser(*USED_MEMBERSHIP)

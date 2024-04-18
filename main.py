@@ -39,23 +39,28 @@ if __name__ == '__main__':
     Stadia   5
     Egs      6"""
     parser = argparse.ArgumentParser(prog='main.py', description=f'{descriptionString}', formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-p', type=int, required=False, dest='Platform', help=f'{platformString}')
+    parser.add_argument('-p', type=int, required=False, dest='platform', help=f'{platformString}')
     parser.add_argument('-id', type=int, required=False, help='bungie ID')
-    args = parser.parse_args()
+    args = vars(parser.parse_args())
+    platform = args['platform']
+    id = args['id']
+
+    if platform != None and id != None:
+        USED_MEMBERSHIP = (platform, id)
+    else:
+        MIJAGO = (3, 4611686018482684809)
+        SUPERQ = (3, 4611686018472661350)
+        SHTGUNWEDDING = (2, 4611686018428655241)
+        EURO = (3, 4611686018471254627)
+        DREDGENQ = (3, 4611686018534347056)
+        SPRQMAN = (2, 4611686018436271063)
+        USED_MEMBERSHIP = DREDGENQ
 
     from pathos.multiprocessing import ProcessPool
     pathos.helpers.freeze_support()  # required for windows
     pool = ProcessPool()
     # You could also specify the amount of threads. Not that this DRASTICALLY speeds up the process but takes serious computation power.
     # pool = ProcessPool(60)
-
-    MIJAGO = (3, 4611686018482684809)
-    SUPERQ = (3, 4611686018472661350)
-    SHTGUNWEDDING = (2, 4611686018428655241)
-    EURO = (3, 4611686018471254627)
-    DREDGENQ = (3, 4611686018534347056)
-    SPRQMAN = (2, 4611686018436271063)
-    USED_MEMBERSHIP = SHTGUNWEDDING
 
     # check manifest
     manifest = DestinyManifest().update()
@@ -74,22 +79,22 @@ if __name__ == '__main__':
     pool.close()
 
     reports = [
-        KDReport(*USED_MEMBERSHIP, manifest),
-        KillsDeathsAssistsReport(*USED_MEMBERSHIP, manifest),
-        WeaponReport(*USED_MEMBERSHIP, manifest),
-        LightLevelReport(*USED_MEMBERSHIP, manifest),
-        PlaytimeReport(*USED_MEMBERSHIP, manifest),
-        PlaytimeCharacterReport(*USED_MEMBERSHIP, manifest),
         ActivityCountReport(*USED_MEMBERSHIP, manifest),
-        WeekdayReport(*USED_MEMBERSHIP, manifest),
         ActivityLocationTimeReport(*USED_MEMBERSHIP, manifest),
         ActivityLocationWeaponReport(*USED_MEMBERSHIP, manifest),
-        ActivityWinrateReport(*USED_MEMBERSHIP, manifest),
-        WeaponKillTreeReport(*USED_MEMBERSHIP, manifest),
-        FireteamRaceReport(*USED_MEMBERSHIP, manifest, video_type=VIDEO_TYPE),
-        WeaponRaceReport(*USED_MEMBERSHIP, manifest, video_type=VIDEO_TYPE),
         ActivityTypeRaceReport(*USED_MEMBERSHIP, manifest, video_type=VIDEO_TYPE),
-        FireteamActivityReport(*USED_MEMBERSHIP, manifest)
+        ActivityWinrateReport(*USED_MEMBERSHIP, manifest),
+        FireteamActivityReport(*USED_MEMBERSHIP, manifest),
+        FireteamRaceReport(*USED_MEMBERSHIP, manifest, video_type=VIDEO_TYPE),
+        KDReport(*USED_MEMBERSHIP, manifest),
+        KillsDeathsAssistsReport(*USED_MEMBERSHIP, manifest),
+        LightLevelReport(*USED_MEMBERSHIP, manifest),
+        PlaytimeCharacterReport(*USED_MEMBERSHIP, manifest),
+        PlaytimeReport(*USED_MEMBERSHIP, manifest),
+        WeaponKillTreeReport(*USED_MEMBERSHIP, manifest),
+        WeaponRaceReport(*USED_MEMBERSHIP, manifest, video_type=VIDEO_TYPE),
+        WeaponReport(*USED_MEMBERSHIP, manifest),
+        WeekdayReport(*USED_MEMBERSHIP, manifest)
     ]
     for report in reports:
         report.generate(data).save()

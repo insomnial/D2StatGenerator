@@ -50,9 +50,13 @@ class ActivityTypeRaceReport(Report):
         return self
 
     def generateData(self, datap):  # pve, pvp, gambit
+        from tqdm import tqdm
+        import warnings
+        warnings.simplefilter("ignore")
+
         eps = []
 
-        for data in datap:
+        for data in tqdm(datap):
             if "entries" not in data: continue
             date = parser.parse(data["period"])
             # find own user entry

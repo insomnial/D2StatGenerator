@@ -56,9 +56,11 @@ class WeaponRaceReport(Report):
         )
 
     def generateData(self, datap, typ="pve"):  # pve, pvp, gambit
+        from tqdm import tqdm
+
         eps = []
 
-        for data in datap:
+        for data in tqdm(datap):
             if "entries" not in data: continue
             date = parser.parse(data["period"])
             # find own user entry

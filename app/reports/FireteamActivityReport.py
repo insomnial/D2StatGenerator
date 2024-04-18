@@ -9,7 +9,6 @@ class FireteamActivityReport(Report):
     def save(self):
         with open("%s/%s.csv" % (Director.GetResultDirectory(self.membershipType, self.membershipId), "[ALL] table - fireteam member activities"), "w", encoding='utf-8') as f:
             self.df.to_csv(f, index=False)
-        print("Report> Generated %s" % self.getName())
 
     def getName(self) -> str:
         return "[ALL] table - fireteam member activities"
@@ -23,10 +22,13 @@ class FireteamActivityReport(Report):
         return self
 
     def generateListDataframe(self, datap):
+        from tqdm import tqdm
+
         eps = []
         displayNames = dict()
         displayNameTimes = dict()
-        for data in datap:
+
+        for data in tqdm(datap):
             if "entries" not in data: continue
             # find own user entry
             entry = [e for e in data["entries"] if e["player"]["destinyUserInfo"]["membershipId"] == str(self.membershipId)][0]

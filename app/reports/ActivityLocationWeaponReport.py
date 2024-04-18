@@ -30,6 +30,7 @@ class ActivityLocationWeaponReport(Report):
         return self
 
     def generateData(self, data):
+        from tqdm import tqdm
 
         category = []
         kills = []
@@ -37,7 +38,7 @@ class ActivityLocationWeaponReport(Report):
         weapon = []
         directorActivity = []
 
-        for datapoint in data:
+        for datapoint in tqdm(data):
             if "entries" not in datapoint: continue
             timestamp = dateutil.parser.parse(datapoint["period"]).timestamp()
             for entry in datapoint["entries"]:

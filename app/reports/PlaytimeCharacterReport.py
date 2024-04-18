@@ -40,6 +40,7 @@ class PlaytimeCharacterReport(Report):
         return self
 
     def generateRawDataframe(self, data):
+        from tqdm import tqdm
 
         starttime_str = []
         starttime = []
@@ -47,7 +48,7 @@ class PlaytimeCharacterReport(Report):
         clazz = []
         character = []
 
-        for datapoint in data:
+        for datapoint in tqdm(data):
             if "entries" not in datapoint: continue
             timestamp = dateutil.parser.parse(datapoint["period"]).timestamp()
             for entry in datapoint["entries"]:

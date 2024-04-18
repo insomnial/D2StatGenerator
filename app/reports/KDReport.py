@@ -39,6 +39,8 @@ class KDReport(Report):
         return self
 
     def generateRawDataframe(self, data):
+        from tqdm import tqdm
+
         starttime = []
         starttime_str = []
         endtime_str = []
@@ -49,7 +51,7 @@ class KDReport(Report):
         deaths = []
         kills = []
 
-        for datapoint in data:
+        for datapoint in tqdm(data):
             if "entries" not in datapoint: continue
             timestamp = dateutil.parser.parse(datapoint["period"]).timestamp()
             for entry in datapoint["entries"]:

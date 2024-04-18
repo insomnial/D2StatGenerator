@@ -36,11 +36,13 @@ class LightLevelReport(Report):
         return self
 
     def generateRawDataframe(self, data):
+        from tqdm import tqdm
+
         starttime = []
         endtime = []
         lightlevel = []
 
-        for datapoint in data:
+        for datapoint in tqdm(data):
             if "entries" not in datapoint: continue
             timestamp = dateutil.parser.parse(datapoint["period"]).timestamp()
             for entry in datapoint["entries"]:

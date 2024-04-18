@@ -43,6 +43,8 @@ class WeekdayReport(Report):
         return self
 
     def generateData(self, data):
+        from tqdm import tqdm
+
         timeArray = [[0 for k in range(0, 24)] for n in range(0, 7)]
         lookup = set()
 
@@ -54,7 +56,7 @@ class WeekdayReport(Report):
                 xdate.hour
             )
 
-        for datapoint in data:
+        for datapoint in tqdm(data):
             if "entries" not in datapoint: continue
             timestamp = dateutil.parser.parse(datapoint["period"]).timestamp()
             for entry in datapoint["entries"]:

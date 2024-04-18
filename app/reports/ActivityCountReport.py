@@ -29,12 +29,13 @@ class ActivityCountReport(Report):
         return self
 
     def generateData(self, data):
+        from tqdm import tqdm
 
         typ = []
         mode = []
         directorActivity = []
 
-        for datapoint in data:
+        for datapoint in tqdm(data):
             if "entries" not in datapoint: continue
             for entry in datapoint["entries"]:
                 if entry["player"]["destinyUserInfo"]["membershipId"] != str(self.membershipId): continue

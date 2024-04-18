@@ -27,12 +27,14 @@ class WeaponKillTreeReport(Report):
         return self
 
     def generateData(self, data):
+        from tqdm import tqdm
+
         weaponType = []
         weapon = []
         killType = []
         kills = []
 
-        for datapoint in data:
+        for datapoint in tqdm(data):
             if "entries" not in datapoint: continue
             for entry in datapoint["entries"]:
                 if entry["player"]["destinyUserInfo"]["membershipId"] != str(self.membershipId): continue

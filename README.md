@@ -9,22 +9,24 @@ My Twitter: https://twitter.com/MijagoCoding/
 
 # How to Use?
 3) Install all required packages
-   1) `python -m pip install pandas plotly pathos requests pretty_html_table bar-chart-race`
-   2) If you want to use mp4 instead of gif, also install `python -m pip install python-ffmpeg` and put a [ffmpeg](https://www.ffmpeg.org/download.html) in your PATH variable. Then set the `VIDEO_TYPE` in `main.py` to `mp4`. 
+   1) `python3 -m pip install pandas plotly pathos requests pretty_html_table bar-chart-race tqdm`
+   2) If you want to use mp4 instead of gif, also install `python3 -m pip install python-ffmpeg` and put a [ffmpeg](https://www.ffmpeg.org/download.html) in your PATH variable. Then set the `VIDEO_TYPE` in `main.py` to `mp4`. 
    
       **I highly encourage you to do this, as the gifs tend to be 40mb in size, whereas the mp4 is only around 1.5mb~2mb**.
    
       Download it here: [ffmpeg](https://github.com/BtbN/FFmpeg-Builds/releases) (for Windows, `ffmpeg-n5.0-latest-win64-gpl-5.0.zip`).
-4) Add your api key to `main.py`. For this, edit `api = BungieApi("API-KEY")`. Get it [here](https://www.bungie.net/en/Application).
-5) Edit your user info in `main.py`.
+4) Set your API key as an environemnt variable `BUNGIE_API_KEY`.  Get the key [here](https://www.bungie.net/en/Application).
+   1) Alternatively: Add your api key to `main.py`. For this, edit `# API_KEY = "123456789"`.
+5) Edit your user info in `main.py`. Alternatively, you can also use command line parameters to set this later.
    ```py
    MEMBERSHIP_MIJAGO = (3, 4611686018482684809)
    MEMBERSHIP_MYCOOLID = (1, 1231231231231233353) # for example, add this
    USED_MEMBERSHIP = MEMBERSHIP_MYCOOLID
-   api = BungieApi("API-KEY")
    ```
-6) Run! `python3 main.py`
-   1) May take a while. I need 35~45 seconds for 1000 PGCRs with a download speed of 4.5mb/s.
+6) Run the script `python3 main.py`.
+   1) Complete Example: `BUNGIE_API_KEY=123456789012345   python3 main.py -p 3 -id 4611686018482684809`
+   2) Alternatively you can also specify the platform and user: `python3 main.py -p 3 -id 4611686018482684809`
+   3) This may take a while. I need 35~45 seconds for 1000 PGCRs with a download speed of 4.5mb/s.
 
 # Where do I get my user ID?
 1) Go to https://www.d2checklist.com (or any other similar page)

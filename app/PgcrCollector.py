@@ -66,7 +66,7 @@ class PGCRCollector:
 
         return self
 
-    def getPGCRs(self, pagesize=1000):
+    def getPGCRs(self):
         bungo = self.api
 
         def downloadPGCR(activity):
@@ -81,20 +81,12 @@ class PGCRCollector:
             with open("%s/pgcr_%s.json" % (Director.GetPGCRDirectory(self.membershipType, self.membershipId), pgcr["activityDetails"]["instanceId"]), "w", encoding='utf-8') as f:
                 f.write(json.dumps(pgcr))
 
-        stepsize = pagesize
-        START_PAGE = 0
-
         if len(self.activities) == 0:
             print("No activities to grab")
             return self
 
-        for steps in range(START_PAGE, (len(self.activities) + stepsize - 1) // stepsize):
-            try:
-                with Timer("Get PGCRs %d through %d" % (steps * stepsize + 1, min(len(self.activities), (steps + 1) * stepsize))):
-                    # self.processPool.restart(True)
-                     self.processPool.amap(downloadPGCR, self.activities[steps * stepsize:(steps + 1) * stepsize]).get()
-            except Exception as e:
-                print(e)
+        from tqdm.auto import tqdm   
+        list(tqdm(self.processPool.imap(downloadPGCR, self.activities), total=len(self.activities), desc="Downloading PGCRs"))
         return self
 
     def combineAllPgcrs(self):

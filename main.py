@@ -19,7 +19,6 @@ from app.reports.WeaponKillTreeReport import WeaponKillTreeReport
 from app.reports.WeaponRaceReport import WeaponRaceReport
 from app.reports.WeaponReport import WeaponReport
 from app.reports.WeekdayReport import WeekdayReport
-# from app.DiscordSender import DiscordSender
 
 ###############################################################################
 #
@@ -31,7 +30,7 @@ if __name__ == '__main__':
 
     # build argument parsing
     descriptionString = """Get and compile stats for a Destiny 2 user.
-    example: main.py 3 4611686018482684809"""
+    example: main.py -p 3 -id 4611686018482684809"""
     platformString = """    Xbox     1
     Psn      2
     Steam    3
@@ -39,33 +38,34 @@ if __name__ == '__main__':
     Stadia   5
     Egs      6"""
     parser = argparse.ArgumentParser(prog='main.py', description=f'{descriptionString}', formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-p', type=int, required=False, dest='platform', help=f'{platformString}')
-    parser.add_argument('-id', type=int, required=False, help='bungie ID')
+    parser.add_argument('--platform', '-p', type=int, required=False, help=f'{platformString}')
+    parser.add_argument('--membership_id', '-id', type=int, required=False, help='Bungie ID')
     args = vars(parser.parse_args())
     platform = args['platform']
-    id = args['id']
+    id = args['membership_id']
 
     if platform != None and id != None:
         USED_MEMBERSHIP = (platform, id)
     else:
         MIJAGO = (3, 4611686018482684809)
-        SUPERQ = (3, 4611686018472661350)
-        SHTGUNWEDDING = (2, 4611686018428655241)
-        EURO = (3, 4611686018471254627)
-        DREDGENQ = (3, 4611686018534347056)
-        SPRQMAN = (2, 4611686018436271063)
-        USED_MEMBERSHIP = DREDGENQ
+        # You can easily set your own ID here:
+        MYCOOLID = (3, 1234567890123456789)
+        USED_MEMBERSHIP = MIJAGO
 
-    from pathos.multiprocessing import ProcessPool
+    from pathos.multiprocessing import ProcessPool, ThreadPool, ThreadingPool
     pathos.helpers.freeze_support()  # required for windows
     pool = ProcessPool()
-    # You could also specify the amount of threads. Not that this DRASTICALLY speeds up the process but takes serious computation power.
-    # pool = ProcessPool(60)
+    # You could also specify the amount of threads. Note that this DRASTICALLY speeds up the process but takes serious computation power.
+    # pool = ProcessPool(40)
 
     # check manifest
     manifest = DestinyManifest().update()
 
-    api = BungieApi(os.getenv('BUNGIE_API_KEY'))
+    # You can also set an api key manually, if you do not want to use environment variables.
+    API_KEY = os.getenv('BUNGIE_API_KEY')
+    # API_KEY = "123456789"
+    
+    api = BungieApi(API_KEY)
     # "gif by default, "mp4" if you installed ffmpeg which you should; see README.d
     VIDEO_TYPE = "mp4"
 
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     Director.ClearResultDirectory(*USED_MEMBERSHIP)
     Director.CreateDirectoriesForUser(*USED_MEMBERSHIP)
     pc = PGCRCollector(*USED_MEMBERSHIP, api, pool)
-    pc.getCharacters().getActivities(limit=None).getPGCRs(pagesize=1000)  # .combineAllPgcrs()
+    pc.getCharacters().getActivities(limit=None).getPGCRs()  # .combineAllPgcrs()
     data = pc.getAllPgcrs()
 
     pool.close()
@@ -101,6 +101,3 @@ if __name__ == '__main__':
 
     Zipper.zip_directory(Director.GetResultDirectory(*USED_MEMBERSHIP), Director.GetZipPath(*USED_MEMBERSHIP))
     print("Generated ZIP:", Director.GetZipPath(*USED_MEMBERSHIP))
-
-    # DiscordSender.send(Director.GetZipPath(*USED_MEMBERSHIP), *USED_MEMBERSHIP)
-    # print("Sent ZIP:", Director.GetZipPath(*USED_MEMBERSHIP))

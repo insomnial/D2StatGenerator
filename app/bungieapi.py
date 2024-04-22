@@ -11,7 +11,7 @@ class BungieApi:
         self.__HEADERS = {"X-API-Key": api_key}
         pass
 
-    def getProfile(self, membershipType, destinyMembershipId, components=[200]):
+    def getProfile(self, membershipType, destinyMembershipId, components=[100]):
         params = {}
         if components is not None: params["components"] = components
 

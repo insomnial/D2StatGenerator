@@ -72,7 +72,9 @@ if __name__ == '__main__':
     Director.CreateDirectoriesForUser(*USED_MEMBERSHIP)
     Director.ClearResultDirectory(*USED_MEMBERSHIP)
     Director.CreateDirectoriesForUser(*USED_MEMBERSHIP)
+    
     pc = PGCRCollector(*USED_MEMBERSHIP, api, pool)
+    pc.getProfile()
     pc.getCharacters().getActivities(limit=None).getPGCRs()  # .combineAllPgcrs()
     data = pc.getAllPgcrs()
 

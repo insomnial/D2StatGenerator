@@ -17,6 +17,19 @@ class PGCRCollector:
         self.api = api
         self.characters = None
         self.activities = None
+        self.displayName = None
+
+    def getProfile(self):
+        print("> Get profile")
+        account_profile = self.api.getProfile(self.membershipType, self.membershipId)
+        bungieGlobalDisplayName = account_profile['profile']['data']['userInfo']['bungieGlobalDisplayName']
+        bungieGlobalDisplayNameCode = account_profile['profile']['data']['userInfo']['bungieGlobalDisplayNameCode']
+        self.displayName = f'{bungieGlobalDisplayName}[{bungieGlobalDisplayNameCode}]'
+        print(f"> Found profile: {self.displayName}")
+        return self
+    
+    def getDisplayName(self):
+        return self.displayName
 
     def getCharacters(self):
         print("> Get Characters")

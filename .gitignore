@@ -181,3 +181,6 @@ pyrightconfig.json
 
 # visual studio remnants
 /.vscode
+
+# mac remnants
+.DS_Store

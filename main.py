@@ -54,6 +54,7 @@ if __name__ == '__main__':
 
     from pathos.multiprocessing import ProcessPool, ThreadPool, ThreadingPool
     pathos.helpers.freeze_support()  # required for windows
+    pool = ProcessPool()
     # You could also specify the amount of threads. Note that this DRASTICALLY speeds up the process but takes serious computation power.
     # pool = ProcessPool(40)
 

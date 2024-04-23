@@ -12,8 +12,8 @@ class ActivityTypeRaceReport(Report):
     def getName(self) -> str:
         return "[ALL] race - activity type playtime"
 
-    def __init__(self, membershipType, membershipId, manifest, video_type="gif") -> None:
-        super().__init__(membershipType, membershipId, manifest)
+    def __init__(self, membershipType, membershipId, displayName, manifest, video_type="gif") -> None:
+        super().__init__(membershipType, membershipId, displayName, manifest)
         self.video_type = video_type
 
     def save(self):
@@ -23,7 +23,7 @@ class ActivityTypeRaceReport(Report):
         df = self.generateData(data)
         bcr.bar_chart_race(
             df=df,
-            filename=Director.GetResultDirectory(self.membershipType, self.membershipId) + "/"
+            filename=Director.GetResultDirectory(self.displayName) + "/"
                      + "[ALL] race - activity type playtime." + self.video_type,
             orientation='h',
             sort='desc',

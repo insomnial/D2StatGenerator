@@ -34,8 +34,16 @@ class PGCRCollector:
     def getCharacters(self):
         print("> Get Characters")
         account_stats = self.api.getAccountStats(self.membershipType, self.membershipId)
-        self.characters = [c["characterId"] for c in account_stats["characters"]]
-        print("Found characters: ", len(self.characters))
+        allCharacters = account_stats['characters']
+        self.characters = [c["characterId"] for c in allCharacters]
+        print("> Found characters: ", len(self.characters))
+        for char in allCharacters:
+            deleted = char['deleted']
+            if deleted:
+                className = None
+            else:
+                className = self.api.getCharacterClass(self.membershipType, self.membershipId, char['characterId'])
+            print(f"{char['characterId']}{'' if className == None else ' | ' + className}")
         return self
 
     def getActivities(self, limit=None):
@@ -43,7 +51,7 @@ class PGCRCollector:
         assert self.characters is not None
         assert len(self.characters) > 0
 
-        existingPgcrList = [f[5:-5] for f in os.listdir(Director.GetPGCRDirectory(self.membershipType, self.membershipId))]
+        existingPgcrList = [f[5:-5] for f in os.listdir(Director.GetPGCRDirectory(self.displayName))]
 
         self.activities = []
         for k, char_id in enumerate(self.characters):
@@ -91,7 +99,7 @@ class PGCRCollector:
                 tries += 1
                 pgcr = bungo.getPGCR(id)
 
-            with open("%s/pgcr_%s.json" % (Director.GetPGCRDirectory(self.membershipType, self.membershipId), pgcr["activityDetails"]["instanceId"]), "w", encoding='utf-8') as f:
+            with open("%s/pgcr_%s.json" % (Director.GetPGCRDirectory(self.displayName), pgcr["activityDetails"]["instanceId"]), "w", encoding='utf-8') as f:
                 f.write(json.dumps(pgcr))
 
         if len(self.activities) == 0:
@@ -105,7 +113,7 @@ class PGCRCollector:
     def combineAllPgcrs(self):
         all = self.getAllPgcrs()
         with Timer("Write all PGCRs to one file"):
-            with open(Director.GetAllPgcrFilename(self.membershipType, self.membershipId), "w", encoding='utf-8') as f:
+            with open(Director.GetAllPgcrFilename(self.displayName), "w", encoding='utf-8') as f:
                 json.dump(all, f, ensure_ascii=False)
         return self
 
@@ -124,7 +132,7 @@ class PGCRCollector:
             return r
 
         with Timer("Get all PGCRs from individual files"):
-            root = Director.GetPGCRDirectory(self.membershipType, self.membershipId)
+            root = Director.GetPGCRDirectory(self.displayName)
             fileList = ["%s/%s" % (root, f) for f in os.listdir(root)]
             chunks = list(zip_longest(*[iter(fileList)] * 100, fillvalue=None))
             pgcrs = self.processPool.amap(loadJson, chunks).get()

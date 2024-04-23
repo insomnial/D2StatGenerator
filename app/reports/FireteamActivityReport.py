@@ -7,14 +7,14 @@ from app.reports.ReportBase import Report
 class FireteamActivityReport(Report):
 
     def save(self):
-        with open("%s/%s.csv" % (Director.GetResultDirectory(self.membershipType, self.membershipId), "[ALL] table - fireteam member activities"), "w", encoding='utf-8') as f:
+        with open("%s/%s.csv" % (Director.GetResultDirectory(self.displayName), "[ALL] table - fireteam member activities"), "w", encoding='utf-8') as f:
             self.df.to_csv(f, index=False)
 
     def getName(self) -> str:
         return "[ALL] table - fireteam member activities"
 
-    def __init__(self, membershipType, membershipId, manifest) -> None:
-        super().__init__(membershipType, membershipId, manifest)
+    def __init__(self, membershipType, membershipId, displayName, manifest) -> None:
+        super().__init__(membershipType, membershipId, displayName, manifest)
         self.df = None
 
     def generate(self, data) -> Report:

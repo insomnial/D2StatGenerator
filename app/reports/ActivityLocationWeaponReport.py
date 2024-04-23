@@ -11,8 +11,8 @@ class ActivityLocationWeaponReport(Report):
     def getName(self) -> str:
         return "[ALL] chart_tree - weapons per activity type and location"
 
-    def __init__(self, membershipType, membershipId, manifest) -> None:
-        super().__init__(membershipType, membershipId, manifest)
+    def __init__(self, membershipType, membershipId, displayName, manifest) -> None:
+        super().__init__(membershipType, membershipId, displayName, manifest)
 
     def generate(self, data) -> Report:
         df = self.generateData(data)

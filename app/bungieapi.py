@@ -1,5 +1,7 @@
 from typing import Dict
 import requests
+from app.data.classhash import CLASS_HASH
+
 
 API_ROOT_PATH = "https://www.bungie.net/Platform"
 
@@ -49,3 +51,16 @@ class BungieApi:
 
     def getItem(self, itemReferenceId):
         pass
+    
+    def getCharacterClass(self, membershipType, destinyMembershipId, characterId):
+        params = {}
+        params['components'] = 200
+
+        try:
+            api_call = requests.get(f'{API_ROOT_PATH}/Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}', headers=self.__HEADERS, params=params, timeout=(10, 10))
+        except:
+            return None
+        
+        classHash = (api_call.json())['Response']['character']['data']['classHash']
+
+        return CLASS_HASH[classHash]

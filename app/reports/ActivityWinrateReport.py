@@ -11,8 +11,8 @@ class ActivityWinrateReport(Report):
     def getName(self) -> str:
         return "[PVP] chart_tree - activity winrate; per mode and map"
 
-    def __init__(self, membershipType, membershipId, manifest, video_type="gif") -> None:
-        super().__init__(membershipType, membershipId, manifest)
+    def __init__(self, membershipType, membershipId, displayName, manifest, video_type="gif") -> None:
+        super().__init__(membershipType, membershipId, displayName, manifest)
         self.video_type = video_type
 
     def generate(self, data) -> Report:

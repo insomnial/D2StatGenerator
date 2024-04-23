@@ -1,6 +1,7 @@
 import json, urllib.request, os, shutil
 
 from app.data.activities import ACTIVITY_NAMES
+from app.data.classhash import CLASS_HASH
 
 BUNGIE_BASE = "https://bungie.net/"
 BUNGIE_API_BASE = "https://bungie.net/Platform/"
@@ -18,15 +19,18 @@ class DestinyManifest():
         self.VersionNumber = GetVersionNumber()
         self.ItemDefinitions = GetInventoryItemDefinitions()
         self.ActivityNames = GetActivityNames()
+        self.ClassHash = GetClassDefinition()
 
         return self
     
+
 def GetCacheFolder():
     # get current file path and go up two directories
     path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     path = os.path.join(path, 'cache')
     os.makedirs(path, exist_ok=True)
     return path
+
 
 def GetVersionNumber():
     print("Check version number")
@@ -52,11 +56,13 @@ def GetVersionNumber():
     with open(file=versionFilePath, mode='w', encoding='utf-8') as f:
         f.write(version)
 
+
 def SaveToCache(aDefinition, aJsonBlob):
     # set root path
     filePath = os.path.join(GetCacheFolder(), aDefinition)
     with open(file=filePath, mode='w', encoding='utf-8') as f:
         json.dump(aJsonBlob, f, ensure_ascii=False, indent=4)
+
 
 def LoadFromCache(aDefinition):
     filePath = os.path.join(GetCacheFolder(), aDefinition)
@@ -66,6 +72,7 @@ def LoadFromCache(aDefinition):
     with open(file=filePath, mode='r', encoding='utf-8') as f:
         blob = json.load(f)
     return blob, True
+
 
 def GetManifestDefinitions(definition):
     print("Get %s" % definition)
@@ -78,19 +85,22 @@ def GetManifestDefinitions(definition):
     manifestPaths = json.loads(urllib.request.urlopen(BUNGIE_API_BASE + "/Destiny2/Manifest/").read())["Response"]
     manifestPath = manifestPaths["jsonWorldComponentContentPaths"]["en"][definition]
     print("Get %s from '%s'" % (definition, BUNGIE_BASE + manifestPath))
-    InventoryItemDefinitions = urllib.request.urlopen(BUNGIE_BASE + manifestPath).read()
+    DefinitionQuery = urllib.request.urlopen(BUNGIE_BASE + manifestPath).read()
     print("Unpack and parse %s" % definition)
 
-    InventoryItemDefinitions = json.loads(InventoryItemDefinitions)
+    DefinitionQuery = json.loads(DefinitionQuery)
     print("Json'd %s and cache'd" % definition)
-    SaveToCache(definition, InventoryItemDefinitions)
+    SaveToCache(definition, DefinitionQuery)
 
-    return InventoryItemDefinitions
+    return DefinitionQuery
 
 
 def GetInventoryItemDefinitions():
     return GetManifestDefinitions("DestinyInventoryItemDefinition")
 
+
+def GetClassDefinition():
+    return CLASS_HASH
 
 def GetActivityNames():
     data = GetManifestDefinitions("DestinyActivityDefinition")

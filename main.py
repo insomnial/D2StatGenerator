@@ -102,5 +102,5 @@ if __name__ == '__main__':
     for report in reports:
         report.generate(data).save()
 
-    Zipper.zip_directory(Director.GetResultDirectory(*USED_MEMBERSHIP), Director.GetZipPath(*USED_MEMBERSHIP))
-    print("Generated ZIP:", Director.GetZipPath(*USED_MEMBERSHIP))
+    Zipper.zip_directory(Director.GetResultDirectory(displayName), Director.GetZipPath(displayName))
+    print("Generated ZIP:", Director.GetZipPath(displayName))

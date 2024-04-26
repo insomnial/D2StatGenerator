@@ -25,7 +25,7 @@ class PGCRCollector:
         bungieGlobalDisplayName = account_profile['profile']['data']['userInfo']['bungieGlobalDisplayName']
         bungieGlobalDisplayNameCode = account_profile['profile']['data']['userInfo']['bungieGlobalDisplayNameCode']
         self.displayName = f'{bungieGlobalDisplayName}[{bungieGlobalDisplayNameCode}]'
-        print(f"> Found profile: {self.displayName}")
+        print(f"Found profile: {self.displayName}")
         return self
     
     def getDisplayName(self):
@@ -36,7 +36,7 @@ class PGCRCollector:
         account_stats = self.api.getAccountStats(self.membershipType, self.membershipId)
         allCharacters = account_stats['characters']
         self.characters = [c["characterId"] for c in allCharacters]
-        print("> Found characters: ", len(self.characters))
+        print("Found characters: ", len(self.characters))
         for char in allCharacters:
             deleted = char['deleted']
             if deleted:

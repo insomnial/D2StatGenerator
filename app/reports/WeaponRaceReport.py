@@ -60,7 +60,7 @@ class WeaponRaceReport(Report):
 
         eps = []
 
-        for data in tqdm(datap):
+        for data in tqdm(datap, desc=self.getName()):
             if "entries" not in data: continue
             date = parser.parse(data["period"])
             # find own user entry

@@ -42,7 +42,7 @@ class PlaytimeReport(Report):
         playtime = []
         mode = []
 
-        for datapoint in tqdm(data):
+        for datapoint in tqdm(data, desc=self.getName()):
             if "entries" not in datapoint: continue
             timestamp = dateutil.parser.parse(datapoint["period"]).timestamp()
             for entry in datapoint["entries"]:

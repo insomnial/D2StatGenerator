@@ -37,7 +37,7 @@ class ActivityWinrateReport(Report):
         directorActivity = []
         wintype = []
 
-        for datapoint in tqdm(data):
+        for datapoint in tqdm(data, desc=self.getName()):
             if "entries" not in datapoint: continue
             timestamp = dateutil.parser.parse(datapoint["period"]).timestamp()
             for entry in datapoint["entries"]:
@@ -73,8 +73,6 @@ class ActivityWinrateReport(Report):
                     directorActivity.append(self.manifest.ActivityNames[key])
                 else:
                     directorActivity.append(key)
-
-        print("done")
 
         df = pd.DataFrame({
             "type": typ,

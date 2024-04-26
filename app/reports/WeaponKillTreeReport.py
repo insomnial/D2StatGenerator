@@ -34,7 +34,7 @@ class WeaponKillTreeReport(Report):
         killType = []
         kills = []
 
-        for datapoint in tqdm(data):
+        for datapoint in tqdm(data, desc=self.getName()):
             if "entries" not in datapoint: continue
             for entry in datapoint["entries"]:
                 if entry["player"]["destinyUserInfo"]["membershipId"] != str(self.membershipId): continue

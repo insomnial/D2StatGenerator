@@ -55,7 +55,7 @@ class FireteamRaceReport(Report):
         displayNames = dict()
         displayNameTimes = dict()
 
-        for data in tqdm(datap):
+        for data in tqdm(datap, desc=self.getName()):
             if "entries" not in data: continue
             # find own user entry
             entry = [e for e in data["entries"] if e["player"]["destinyUserInfo"]["membershipId"] == str(self.membershipId)][0]

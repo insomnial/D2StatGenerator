@@ -106,7 +106,7 @@ class PGCRCollector:
             print("No activities to grab")
             return self
 
-        from tqdm.auto import tqdm   
+        from tqdm.auto import tqdm
         list(tqdm(self.processPool.imap(downloadPGCR, self.activities), total=len(self.activities), desc="Downloading PGCRs"))
         return self
 

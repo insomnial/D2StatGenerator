@@ -184,3 +184,6 @@ pyrightconfig.json
 
 # mac remnants
 .DS_Store
+
+# build scripts
+*.sh

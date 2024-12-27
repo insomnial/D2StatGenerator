@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     # build argument parsing
     descriptionString = """Get and compile stats for a Destiny 2 user.
-    example: main.py -p 3 -id 4611686018482684809"""
+    example: main.py -p 3 -id 4611686018472661350"""
     platformString = """    Xbox     1
     Psn      2
     Steam    3
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     pathos.helpers.freeze_support()  # required for windows
     pool = ProcessPool()
     # You could also specify the amount of threads. Note that this DRASTICALLY speeds up the process but takes serious computation power.
-    # pool = ProcessPool(40)
+    # pool = ProcessPool(128)
 
     # check manifest
     manifest = DestinyManifest().update()

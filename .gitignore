@@ -187,3 +187,5 @@ pyrightconfig.json
 
 # build scripts
 *.sh
+
+/data

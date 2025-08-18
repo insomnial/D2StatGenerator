@@ -40,9 +40,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='main.py', description=f'{descriptionString}', formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('--platform', '-p', type=int, required=False, help=f'{platformString}')
     parser.add_argument('--membership_id', '-id', type=int, required=False, help='Bungie ID')
+    parser.add_argument('--offline', '-o', action='store_true', required=False, help='Run in offline mode (no API calls)')
     args = vars(parser.parse_args())
     platform = args['platform']
     id = args['membership_id']
+    offline = args['offline']
 
     if platform != None and id != None:
         USED_MEMBERSHIP = (platform, id)
@@ -58,28 +60,31 @@ if __name__ == '__main__':
     # You could also specify the amount of threads. Note that this DRASTICALLY speeds up the process but takes serious computation power.
     # pool = ProcessPool(128)
 
-    # check manifest
-    manifest = DestinyManifest().update()
+    if not offline:
+        # check manifest
+        manifest = DestinyManifest().update()
 
-    # You can also set an api key manually, if you do not want to use environment variables.
-    API_KEY = os.getenv('BUNGIE_API_KEY')
-    # API_KEY = "123456789"
-    
-    api = BungieApi(API_KEY)
-    # "mp4" if you installed ffmpeg which you should; see README.d. otherwise "gif" if you do not.
-    VIDEO_TYPE = "mp4"
+        # You can also set an api key manually, if you do not want to use environment variables.
+        API_KEY = os.getenv('BUNGIE_API_KEY')
+        # API_KEY = "123456789"
+        
+        api = BungieApi(API_KEY)
+        # "mp4" if you installed ffmpeg which you should; see README.d. otherwise "gif" if you do not.
+        VIDEO_TYPE = "mp4"
 
-    pc = PGCRCollector(*USED_MEMBERSHIP, api, pool)
-    displayName = pc.getProfile().getDisplayName()
+        pc = PGCRCollector(*USED_MEMBERSHIP, api, pool)
+        displayName = pc.getProfile().getDisplayName()
 
-    Director.CreateDirectoriesForUser(displayName)
-    Director.ClearResultDirectory(displayName)
-    Director.CreateDirectoriesForUser(displayName)
-    
-    pc.getCharacters().getActivities(limit=None).getPGCRs()  # .combineAllPgcrs()
-    data = pc.getAllPgcrs()
+        Director.CreateDirectoriesForUser(displayName)
+        Director.ClearResultDirectory(displayName)
+        Director.CreateDirectoriesForUser(displayName)
+        
+        pc.getCharacters().getActivities(limit=None).getPGCRs()  # .combineAllPgcrs()
+        data = pc.getAllPgcrs()
 
-    pool.close()
+        pool.close()
+    else:
+        pass
 
     reports = [
         ActivityCountReport(*USED_MEMBERSHIP, displayName, manifest),

@@ -85,7 +85,8 @@ ACTIVITY_NAMES = {
     89: 'Zone Control',
     90: 'Iron Banner Rift',
     91: 'Iron Banner Zone Control',
-    92: 'Relic'
+    92: 'Relic',
+    93: 'The Lawless Frontier'
 }
 
 PVP_ACTIVITIES = [92, 91, 90, 89, 84, 81, 80, 74, 73, 72, 71, 68, 65, 62, 61, 60, 59, 50, 48, 43, 45, 44, 41, 42, 37, 38, 31, 25, 15]
